@@ -54,7 +54,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-o
 .legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px;color:var(--mu);margin-bottom:10px}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .dow{text-align:center;font-size:12px;color:var(--mu);padding:4px 0}
-.day{min-height:64px;background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:3px;font-size:12px;cursor:pointer;overflow:hidden;text-align:left;display:block}
+.day{min-height:88px;background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:3px;font-size:12px;cursor:pointer;overflow:hidden;text-align:left;display:block}
 .day.sel{outline:2px solid var(--tx)}
 .day.today .n{font-weight:800;text-decoration:underline}
 .day .n{color:var(--mu)}
@@ -223,7 +223,6 @@ function sidx(s){var i=SEED.indexOf(s.name);return i<0?999:i}
 function norm(){
   D.students=D.students||[];D.recs=D.recs||[];D.pays=D.pays||[];
   (function(){var mp={},np=[];D.pays.forEach(function(p){var k=p.sid+"|"+p.date;if(mp[k]){mp[k].amt+=p.amt;mp[k].ta=(mp[k].ta||0)+(p.ta||0)}else{mp[k]={id:p.id,sid:p.sid,date:p.date,amt:p.amt,ta:p.ta||0};np.push(mp[k])}});D.pays=np})();
-  (function(){var mp={},np=[];D.pays.forEach(function(p){var k=p.sid+"|"+p.date;if(mp[k]){mp[k].amt+=p.amt;mp[k].ta=(mp[k].ta||0)+(p.ta||0)}else{mp[k]={id:p.id,sid:p.sid,date:p.date,amt:p.amt,ta:p.ta||0};np.push(mp[k])}});D.pays=np})();
   if(!D.m){D.m=1;var g=D.students.filter(function(s){return s.name==="가률"}).map(function(s){return s.id});D.students=D.students.filter(function(s){return g.indexOf(s.id)<0});D.recs=D.recs.filter(function(r){return g.indexOf(r.sid)<0});D.students.forEach(function(s){if(s.name==="서로")s.name="로"})}
   if(!D.m2){D.m2=1;if(!D.students.some(function(s){return s.name==="주원"}))D.students.push({id:"sjw1",name:"주원"})}
   D.students=D.students.map(function(s,i){return{s:s,i:i}}).sort(function(a,b){return sidx(a.s)-sidx(b.s)||a.i-b.i}).map(function(x){return x.s});
@@ -266,10 +265,26 @@ function sname(id){var x=D.students.find(function(s){return s.id===id});return x
 var unlocked=false;
 function gate(fn){if(unlocked){fn();return}dlg("비밀번호를 입력하세요","",function(v){if(v===EDIT_PW){unlocked=true;note("수정이 열렸어요");render();fn()}else note("비밀번호가 틀렸어요")},true)}
 function stuSum(s){return Math.max(0,D.recs.filter(function(r){return r.sid===s.id}).reduce(function(a,r){return a+tier(r.time).fee},0)+(s.adj||0))}
+function ordered(){
+  var l=D.students.map(function(s,i){return{s:s,i:i,v:stuSum(s)}});
+  if(!unlocked)l.sort(function(a,b){return b.v-a.v||a.i-b.i});
+  return l.map(function(x){return x.s})}
+function paidOf(id){return (D.pays||[]).filter(function(p){return p.sid===id}).reduce(function(a,p){return a+p.amt},0)}
 function logPay(sid,amt,ta){D.pays=D.pays||[];var dd=ymd(new Date()),e=D.pays.find(function(p){return p.sid===sid&&p.date===dd});if(e){e.amt+=amt;e.ta=(e.ta||0)+(ta||0)}else D.pays.push({id:uid(),sid:sid,date:dd,amt:amt,ta:ta||0})}
 function trimPay(sid,x){var a=D.pays||[];for(var i=a.length-1;i>=0&&x>0;i--){if(a[i].sid!==sid)continue;var t=Math.min(x,a[i].amt);a[i].amt-=t;x-=t;if(a[i].amt<=0)a.splice(i,1)}}
 function delPay(id){gate(function(){dlg("이 납부 기록을 취소할까요? (남은 금액에 다시 더해져요)",null,function(){var pe=(D.pays||[]).find(function(x){return x.id===id});if(!pe)return;var s=D.students.find(function(x){return x.id===pe.sid});if(s)s.adj=(s.adj||0)+pe.amt;D.tot=Math.max(0,(D.tot||0)-(pe.ta||0));D.pays=D.pays.filter(function(x){return x.id!==id});save();render()})})}
-function payChips(ds){var m={},o=[];(D.pays||[]).forEach(function(p){if(p.date===ds){if(!(p.sid in m)){m[p.sid]=0;o.push(p.sid)}m[p.sid]+=p.amt}});return o.filter(function(k){return m[k]>0}).map(function(k){return '<span class="chip pd">'+esc(sname(k))+' '+m[k].toLocaleString("ko-KR")+'</span>'}).join("")}
+function delPay2(id){gate(function(){dlg("이 납부 기록을 삭제할까요? (금액은 그대로 두고 기록만 지워요)",null,function(){D.pays=(D.pays||[]).filter(function(x){return x.id!==id});save();render()})})}
+function editPay(id){gate(function(){var p=(D.pays||[]).find(function(x){return x.id===id});if(!p)return;
+  dlg("납부 금액 수정 (숫자)",String(p.amt),function(v){var n=parseInt(String(v).replace(/[^0-9]/g,""),10);if(isNaN(n))return;if(n<=0)D.pays=D.pays.filter(function(x){return x.id!==id});else p.amt=n;save();render()},"num")})}
+function editAdj(id){gate(function(){var s=D.students.find(function(x){return x.id===id});
+  dlg("금액 조정 (숫자, 마이너스 가능)",String(s.adj||0),function(v){var n=parseInt(String(v).replace(/[^0-9-]/g,""),10);if(isNaN(n))return;s.adj=n;save();render()})})}
+function delAdj(id){gate(function(){dlg("금액 조정을 삭제할까요?",null,function(){var s=D.students.find(function(x){return x.id===id});if(s){s.adj=0;save();render()}})})}
+function payChips(ds){var m={},o=[];(D.pays||[]).forEach(function(p){if(p.date===ds){if(!(p.sid in m)){m[p.sid]=0;o.push(p.sid)}m[p.sid]+=p.amt}});return o.filter(function(k){return m[k]>0}).map(function(k){return '<span class="chip pd">'+esc(sname(k))+' '+m[k].toLocaleString("ko-KR")+'</span>'})}
+function dayChips(rs,ds){
+  var a=rs.map(function(r){return '<span class="chip '+tier(r.time).cls+'">'+esc(sname(r.sid))+'</span>'}).concat(payChips(ds));
+  var h=a.slice(0,4).join("");
+  if(a.length>4)h+='<span class="chip" style="text-align:center;color:var(--mu)">··</span>';
+  return h}
 function pay(id,n){gate(function(){var s=D.students.find(function(x){return x.id===id}),a=Math.min(n,stuSum(s));if(a<=0)return;s.adj=(s.adj||0)-a;D.tot=(D.tot||0)+a;logPay(id,a,a);save();render()})}
 function payAll(id){pay(id,stuSum(D.students.find(function(x){return x.id===id})))}
 function editTot(){gate(function(){dlg("총 지각비 (숫자 입력)",String(D.tot||0),function(v){var n=parseInt(String(v).replace(/[^0-9]/g,""),10);if(!isNaN(n)){D.tot=n;save();render()}},"num")})}
@@ -315,12 +330,14 @@ function togg(id){open[id]=!open[id];renderStudents()}
 function renderChips(){document.getElementById("chips").innerHTML=D.students.map(function(s){return '<button class="'+(sel[s.id]?"on":"")+'" onclick="pick(\''+s.id+'\')">'+esc(s.name)+'</button>'}).join("")}
 function renderStudents(){
   var h="";
-  D.students.forEach(function(s){
+  ordered().forEach(function(s){
     var rs=D.recs.filter(function(r){return r.sid===s.id}).sort(function(a,b){return b.date.localeCompare(a.date)});
-    var sum=stuSum(s);
-    h+='<div class="card"><div class="row"><div><span class="name">'+esc(s.name)+'</span> <span class="sub">'+rs.length+'회</span></div><div class="row">'+(unlocked?'<button class="mini" onclick="adj(\''+s.id+'\',-1000)">−1,000</button>':'')+'<span class="amt">'+won(sum)+'</span>'+(unlocked?'<button class="mini" onclick="adj(\''+s.id+'\',1000)">+1,000</button>':'')+'<button class="mini" onclick="togg(\''+s.id+'\')">'+(open[s.id]?"닫기":"기록")+'</button></div></div>';
+    var sum=stuSum(s),paid=paidOf(s.id),ps=(D.pays||[]).filter(function(p){return p.sid===s.id}).sort(function(a,b){return b.date.localeCompare(a.date)});
+    var ptag=paid>0?' <span class="tag pd">'+(sum===0?'완납 ':'납부 ')+won(paid)+'</span>':'';
+    h+='<div class="card"><div class="row"><div><span class="name">'+esc(s.name)+'</span> <span class="sub">'+rs.length+'회</span>'+ptag+'</div><div class="row">'+(unlocked?'<button class="mini" onclick="adj(\''+s.id+'\',-1000)">−1,000</button>':'')+'<span class="amt">'+won(sum)+'</span>'+(unlocked?'<button class="mini" onclick="adj(\''+s.id+'\',1000)">+1,000</button>':'')+'<button class="mini" onclick="togg(\''+s.id+'\')">'+(open[s.id]?"닫기":"기록")+'</button></div></div>';
     if(open[s.id]){h+=rs.length?rs.map(recLine).join(""):'<div class="empty">지각 기록이 없어요.</div>';
-      if(s.adj)h+='<div class="rec"><span>금액 조정 '+(s.adj>0?"+":"")+won(s.adj)+'</span></div>';
+      if(s.adj)h+='<div class="rec"><span>금액 조정 '+(s.adj>0?"+":"")+won(s.adj)+'</span><span class="b"><button onclick="editAdj(\''+s.id+'\')">수정</button><button class="d" onclick="delAdj(\''+s.id+'\')">삭제</button></span></div>';
+      ps.forEach(function(p){h+='<div class="rec"><span>'+p.date.slice(5).replace("-","/")+' <span class="tag pd">'+won(p.amt)+' 납부</span></span><span class="b"><button onclick="editPay(\''+p.id+'\')">수정</button><button class="d" onclick="delPay2(\''+p.id+'\')">삭제</button></span></div>'});
       h+='<div class="rec"><span></span><span class="b"><button onclick="renameStudent(\''+s.id+'\')">이름 변경</button><button class="d" onclick="delStudent(\''+s.id+'\')">학생 삭제</button></span></div>'}
     h+='</div>'});
   document.getElementById("students").innerHTML=h}
@@ -333,7 +350,7 @@ function renderCal(){
     var ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
     var rs=D.recs.filter(function(r){return r.date===ds});
     h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'
-     +rs.map(function(r){return '<span class="chip '+tier(r.time).cls+'">'+esc(sname(r.sid))+'</span>'}).join("")+payChips(ds)+'</button>'}
+     +dayChips(rs,ds)+'</button>'}
   document.getElementById("cal").innerHTML=h;
   var dt=document.getElementById("detail");
   if(!selDate){dt.innerHTML='<div class="empty">날짜를 누르면 그날 지각한 학생이 보여요.</div>';return}
@@ -548,7 +565,7 @@ function medal(r){
 function render(){
   var c=[0,0,0],sum=0;D.recs.forEach(function(r){var t=tier(r.time);sum+=t.fee;if(t.fee)c[t.fee/1000-2]++});
   document.getElementById("total").textContent=won(D.tot||0);
-  var ow=D.students.map(function(s){return{id:s.id,n:s.name,v:stuSum(s)}}).filter(function(x){return x.v>0}).sort(function(a,b){return b.v-a.v}),oe=document.getElementById("owe");
+  var ow=D.students.map(function(s){return{id:s.id,n:s.name,v:stuSum(s)}}).filter(function(x){return x.v>0}).sort(function(a,b){return unlocked?0:b.v-a.v}),oe=document.getElementById("owe");
   oe.hidden=!ow.length;oe.innerHTML=ow.length?'<div class="owet">내야 할 금액</div>'+ow.map(function(x){return '<div class="orow"><span class="on">'+esc(x.n)+'</span><span class="ov">'+won(x.v)+'</span><span class="ob"><button class="ck" onclick="payAll(\''+x.id+'\')" aria-label="완납">✓</button><button onclick="pay(\''+x.id+'\',1000)">−1,000</button><button onclick="adj(\''+x.id+'\',1000)">+1,000</button></span></div>'}).join(""):"";
   document.body.classList.toggle("edit",unlocked);document.getElementById("lockBtn").textContent=unlocked?"🔓 수정 끝내기":"🔒 수정";document.getElementById("modeTxt").textContent=unlocked?"수정 모드":"보기 전용";
   var n=c[0]+c[1]+c[2];
