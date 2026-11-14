@@ -159,7 +159,7 @@ button.p{background:var(--xr);color:var(--xon);border-color:var(--xr)}
 .tree{width:68px;height:auto;display:block;margin:0 auto 2px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}
 .tree .st{animation:tw 1.6s ease-in-out infinite;transform-origin:34px 8px}
 .tree .o1{animation:tw 2s ease-in-out infinite}.tree .o2{animation:tw 2s ease-in-out .6s infinite}.tree .o3{animation:tw 2s ease-in-out 1.2s infinite}
-.ttl{font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;font-size:26px;text-shadow:0 2px 0 rgba(255,255,255,.6),0 0 14px rgba(212,160,23,.35)}
+.ttl{font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;font-size:26px;text-shadow:none}
 .xdd{display:inline-block;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:3px 14px;box-shadow:0 2px 6px rgba(30,40,80,.08)}
 .box{position:relative;margin-top:14px;box-shadow:0 10px 28px rgba(200,16,46,.18),0 0 0 4px rgba(22,91,51,.10)}
 .total{background:linear-gradient(90deg,var(--xr),var(--xgold),var(--xr));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
@@ -178,6 +178,10 @@ main{padding-bottom:20px}
 .acct svg{width:52px;height:auto;display:block;filter:drop-shadow(0 4px 4px rgba(0,0,0,.28))}
 @keyframes wig{0%,84%,100%{transform:rotate(0)}87%{transform:rotate(-9deg)}90%{transform:rotate(8deg)}93%{transform:rotate(-5deg)}96%{transform:rotate(3deg)}}
 @media (prefers-reduced-motion:reduce){.acct{animation:none}}
+
+/* ===== 📝 시험 일정 ===== */
+.day.ex{background:var(--rt)}
+.chip.ev{white-space:normal;background:var(--sf);color:var(--red);border:1px solid rgba(220,38,38,.35);line-height:1.25;padding:1px 3px}
 </style>
 </head>
 <body>
@@ -229,6 +233,7 @@ main{padding-bottom:20px}
     <span><span class="tag t2">빨강</span> 8:06~8:09:59 · 3,000원</span>
     <span><span class="tag t3">보라</span> 8:10~ · 4,000원</span>
     <span><span class="tag pd">초록</span> 납부</span>
+    <span><span class="tag" style="background:var(--rt);color:var(--red)">연빨강</span> 시험 일정</span>
   </div>
   <div class="nav"><button onclick="mv(-1)" aria-label="이전 달">‹</button><span id="mt"></span><button onclick="mv(1)" aria-label="다음 달">›</button></div>
   <div class="cal" id="cal"></div>
@@ -343,9 +348,11 @@ function editAdj(id){gate(function(){var s=D.students.find(function(x){return x.
   dlg("금액 조정 (숫자, 마이너스 가능)",String(s.adj||0),function(v){var n=parseInt(String(v).replace(/[^0-9-]/g,""),10);if(isNaN(n))return;s.adj=n;save();render()})})}
 function delAdj(id){gate(function(){dlg("금액 조정을 삭제할까요?",null,function(){var s=D.students.find(function(x){return x.id===id});if(s){s.adj=0;save();render()}})})}
 function payChips(ds){var m={},o=[];(D.pays||[]).forEach(function(p){if(p.date===ds){if(!(p.sid in m)){m[p.sid]=0;o.push(p.sid)}m[p.sid]+=p.amt}});return o.filter(function(k){return m[k]>0}).map(function(k){return '<span class="chip pd">'+esc(sname(k))+' '+m[k].toLocaleString("ko-KR")+'</span>'})}
+var EX={"2026-12-09":["공통수학2"],"2026-12-10":["통합과학2"],"2026-12-11":["공통영어2"],"2026-12-14":["통합사회2","정보"],"2026-12-15":["공통국어2","한국사2"]};
+function exChips(ds){return (EX[ds]||[]).map(function(t){return '<span class="chip ev">'+esc(t)+'</span>'}).join("")}
 function dayChips(rs,ds){
   var a=rs.map(function(r){return '<span class="chip '+tier(r.time).cls+'">'+esc(sname(r.sid))+'</span>'}).concat(payChips(ds));
-  var h=a.slice(0,4).join("");
+  var h=exChips(ds)+a.slice(0,4).join("");
   if(a.length>4)h+='<span class="chip" style="text-align:center;color:var(--mu)">··</span>';
   return h}
 function pay(id,n){gate(function(){var s=D.students.find(function(x){return x.id===id}),a=Math.min(n,stuSum(s));if(a<=0)return;s.adj=(s.adj||0)-a;D.tot=(D.tot||0)+a;logPay(id,a,a);save();render()})}
@@ -412,13 +419,13 @@ function renderCal(){
   for(var d=1;d<=days;d++){
     var ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
     var rs=D.recs.filter(function(r){return r.date===ds});
-    h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'+(m===11&&d===25?'<span style="float:right;font-size:11px">🎄</span>':'')
+    h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+(EX[ds]?" ex":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'+(m===11&&d===25?'<span style="float:right;font-size:11px">🎄</span>':'')
      +dayChips(rs,ds)+'</button>'}
   document.getElementById("cal").innerHTML=h;
   var dt=document.getElementById("detail");
   if(!selDate){dt.innerHTML='<div class="empty">날짜를 누르면 그날 지각한 학생이 보여요.</div>';return}
   var rs=D.recs.filter(function(r){return r.date===selDate}),ps=(D.pays||[]).filter(function(p){return p.date===selDate});
-  var h2='<div class="name">'+selDate.replace(/-/g,".")+'</div>';
+  var h2='<div class="name">'+selDate.replace(/-/g,".")+'</div>'+(EX[selDate]?'<div class="sub" style="margin:4px 0;color:var(--red);font-weight:700">📝 '+EX[selDate].map(esc).join(", ")+'</div>':'');
   h2+=rs.length?rs.map(function(r){var t=tier(r.time);return '<div class="rec"><span>'+esc(sname(r.sid))+" · "+r.time.slice(0,8)+' <span class="tag '+t.cls+'">'+t.label+'</span></span><span class="b"><button onclick="editRec(\''+r.id+'\')">수정</button><button class="d" onclick="delRec(\''+r.id+'\')">삭제</button></span></div>'}).join(""):(ps.length?"":'<div class="empty">지각한 학생이 없어요.</div>');
   if(ps.length)h2+='<div class="owet" style="margin-top:8px">납부</div>'+ps.map(function(p){return '<div class="rec"><span>'+esc(sname(p.sid))+' <span class="tag pd">'+won(p.amt)+' 납부</span></span><span class="b"><button class="d" onclick="delPay(\''+p.id+'\')">취소</button></span></div>'}).join("");
   dt.innerHTML=h2}
