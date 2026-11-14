@@ -182,6 +182,14 @@ main{padding-bottom:20px}
 /* ===== 📝 시험 일정 ===== */
 .day.ex{background:var(--rt)}
 .chip.ev{white-space:normal;background:var(--sf);color:var(--red);border:1px solid rgba(220,38,38,.35);line-height:1.25;padding:1px 3px}
+
+/* ===== 🌟 황금 크리스마스 / 기말고사 D-day ===== */
+.xdd2{margin:0 0 6px;color:var(--red)}
+.ttl{margin-bottom:10px}
+.day.xm{background:linear-gradient(145deg,#fff3c4,#f6d365 55%,#e8b923);border-color:#d4a017;box-shadow:0 0 0 1px #e8b923,0 0 14px 3px rgba(242,201,76,.65);animation:gold 2.6s ease-in-out infinite}
+.day.xm .n{color:#6b4a00;font-weight:800}
+@keyframes gold{0%,100%{box-shadow:0 0 0 1px #e8b923,0 0 12px 2px rgba(242,201,76,.5)}50%{box-shadow:0 0 0 1px #f2c94c,0 0 22px 7px rgba(242,201,76,.95)}}
+@media (prefers-reduced-motion:reduce){.day.xm{animation:none}}
 </style>
 </head>
 <body>
@@ -190,8 +198,8 @@ main{padding-bottom:20px}
   <button class="trophy" id="trophyBtn" onclick="openAward()" aria-label="시상식">🏆</button>
   <button class="acct" onclick="var p=document.getElementById('pop');p.hidden=!p.hidden" aria-label="영완쌤 계좌 선물상자"><svg viewBox="0 0 56 50" aria-hidden="true"><rect x="7" y="22" width="42" height="26" rx="3" fill="#c8102e"/><rect x="7" y="22" width="42" height="6" fill="#000" opacity=".12"/><rect x="3" y="14" width="50" height="11" rx="3" fill="#e0243f"/><rect x="25" y="14" width="6" height="34" fill="#f2c94c"/><rect x="25" y="14" width="6" height="11" fill="#f7dc7a"/><ellipse cx="21" cy="9" rx="8" ry="5" transform="rotate(-25 21 9)" fill="none" stroke="#f2c94c" stroke-width="3.5"/><ellipse cx="35" cy="9" rx="8" ry="5" transform="rotate(25 35 9)" fill="none" stroke="#f2c94c" stroke-width="3.5"/><circle cx="28" cy="12" r="3.6" fill="#f2c94c"/></svg><span>영완쌤 계좌</span></button>
   <div class="pop" id="pop" hidden><b>🎁 영완쌤 계좌</b><span>신한 110-358-985408</span><button class="mini" style="margin-top:8px;width:100%" onclick="copyAcct()">복사하기</button></div>
-  <svg class="tree" viewBox="0 0 64 74" aria-hidden="true"><rect x="28" y="62" width="8" height="10" rx="1.5" fill="#7a4a24"/><polygon points="32,10 50,32 14,32" fill="#1f7a3f"/><polygon points="32,22 54,48 10,48" fill="#26924d"/><polygon points="32,36 58,64 6,64" fill="#2fa95b"/><polygon class="st" points="32,0 34.4,6 41,6.4 36,10.6 37.6,17 32,13.4 26.4,17 28,10.6 23,6.4 29.6,6" fill="#f2c94c"/><circle class="o1" cx="28" cy="28" r="2.6" fill="#ff4d6d"/><circle class="o2" cx="38" cy="43" r="2.8" fill="#f2c94c"/><circle class="o3" cx="23" cy="51" r="2.8" fill="#4aa3ff"/><circle class="o1" cx="40" cy="57" r="2.8" fill="#ff4d6d"/><circle class="o2" cx="30" cy="42" r="2.4" fill="#4aa3ff"/><circle class="o3" cx="46" cy="60" r="2.4" fill="#f2c94c"/><circle class="o1" cx="16" cy="60" r="2.4" fill="#f2c94c"/></svg>
   <h1 class="ttl">🎄 지각비 장부 🎅</h1>
+  <div class="xdd xdd2" id="xdd2"></div>
   <div class="xdd" id="xdd"></div>
   <div class="box">
     <p>지금까지 쌓인 지각비</p>
@@ -233,7 +241,7 @@ main{padding-bottom:20px}
     <span><span class="tag t2">빨강</span> 8:06~8:09:59 · 3,000원</span>
     <span><span class="tag t3">보라</span> 8:10~ · 4,000원</span>
     <span><span class="tag pd">초록</span> 납부</span>
-  
+    <span><span class="tag" style="background:var(--rt);color:var(--red)">연빨강</span> 시험 일정</span>
   </div>
   <div class="nav"><button onclick="mv(-1)" aria-label="이전 달">‹</button><span id="mt"></span><button onclick="mv(1)" aria-label="다음 달">›</button></div>
   <div class="cal" id="cal"></div>
@@ -334,9 +342,7 @@ var unlocked=false;
 function gate(fn){if(unlocked){fn();return}dlg("비밀번호를 입력하세요","",function(v){if(v===EDIT_PW){unlocked=true;note("수정이 열렸어요");render();fn()}else note("비밀번호가 틀렸어요")},true)}
 function stuSum(s){return Math.max(0,D.recs.filter(function(r){return r.sid===s.id}).reduce(function(a,r){return a+tier(r.time).fee},0)+(s.adj||0))}
 function ordered(){
-  var l=D.students.map(function(s,i){return{s:s,i:i,v:stuSum(s)}});
-  if(!unlocked)l.sort(function(a,b){return b.v-a.v||a.i-b.i});
-  return l.map(function(x){return x.s})}
+  return D.students.slice()}
 function paidOf(id){return (D.pays||[]).filter(function(p){return p.sid===id}).reduce(function(a,p){return a+p.amt},0)}
 function logPay(sid,amt,ta){D.pays=D.pays||[];var dd=ymd(new Date()),e=D.pays.find(function(p){return p.sid===sid&&p.date===dd});if(e){e.amt+=amt;e.ta=(e.ta||0)+(ta||0)}else D.pays.push({id:uid(),sid:sid,date:dd,amt:amt,ta:ta||0})}
 function trimPay(sid,x){var a=D.pays||[];for(var i=a.length-1;i>=0&&x>0;i--){if(a[i].sid!==sid)continue;var t=Math.min(x,a[i].amt);a[i].amt-=t;x-=t;if(a[i].amt<=0)a.splice(i,1)}}
@@ -419,7 +425,7 @@ function renderCal(){
   for(var d=1;d<=days;d++){
     var ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
     var rs=D.recs.filter(function(r){return r.date===ds});
-    h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+(EX[ds]?" ex":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'+(m===11&&d===25?'<span style="float:right;font-size:11px">🎄</span>':'')
+    h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+(EX[ds]?" ex":"")+(m===11&&d===25?" xm":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'+(m===11&&d===25?'<span style="float:right;font-size:11px">🎄</span>':'')
      +dayChips(rs,ds)+'</button>'}
   document.getElementById("cal").innerHTML=h;
   var dt=document.getElementById("detail");
@@ -649,6 +655,8 @@ function xmasInit(){
   var n=new Date(),t=new Date(n.getFullYear(),n.getMonth(),n.getDate()),x=new Date(n.getFullYear(),11,25),
       dd=Math.round((x-t)/864e5),e=document.getElementById("xdd");
   e.textContent=dd>0?"🎁 크리스마스까지 D-"+dd:(dd===0?"🎉 메리 크리스마스!":"✨ 즐거운 연말 보내세요");
+  var ex0=new Date(2026,11,9),ex1=new Date(2026,11,15),d2=Math.round((ex0-t)/864e5),e2=document.getElementById("xdd2");
+  e2.textContent=d2>0?"📝 기말고사까지 D-"+d2:(t<=ex1?(d2===0?"📝 오늘 기말고사 시작!":"📝 기말고사 기간 중!"):"🎉 기말고사 끝! 수고했어요");
   if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
   var c=document.getElementById("snow"),ch=["❄","❅","❆","•"],h="";
   for(var i=0;i<26;i++){h+='<span style="left:'+(Math.random()*100).toFixed(1)+'%;font-size:'+(8+Math.random()*10).toFixed(0)+'px;animation-duration:'+(9+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*16).toFixed(1)+'s">'+ch[i%4]+'</span>'}
