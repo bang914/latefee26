@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>지각비 장부</title>
+<title>🎄 지각비 장부</title>
 <style>
 :root{--bg:#f6f5f1;--sf:#fff;--tx:#1d2330;--mu:#6b7280;--ln:#e3e1da;--blue:#2563eb;--red:#dc2626;--pur:#7c3aed;--bt:#e8eefc;--rt:#fde8e8;--pt:#efe8fd;--gt:#dcfce7;--gn:#15803d;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -120,14 +120,75 @@ body:not(.edit) .eo,body:not(.edit) .rec .b{display:none}
 #award .popb.ps.on{background:linear-gradient(145deg,#3a2a08,#1a1304);color:#f2dc92;border-color:#c9a24a}
 .popb span{display:inline-block}.popb.pr span{transform:scaleX(-1)}
 .aempty{text-align:center;color:#9aa0b4;padding:28px 8px;border:1px dashed rgba(255,255,255,.18);border-radius:10px}
+
+/* ===== 🎄 크리스마스 에디션 ===== */
+:root{--xr:#c8102e;--xg:#165b33;--xgold:#d4a017;--xon:#fff;--xgon:#fff;--bg:#f8f4ec}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--xr:#ff6b6b;--xg:#5fd08f;--xgold:#f2c94c;--xon:#2a0a0a;--xgon:#0b2a1a;--bg:#0f1a16;--sf:#1a2822;--ln:#2d4038}}
+:root[data-theme="dark"]{--xr:#ff6b6b;--xg:#5fd08f;--xgold:#f2c94c;--xon:#2a0a0a;--xgon:#0b2a1a;--bg:#0f1a16;--sf:#1a2822;--ln:#2d4038}
+.hero{background:linear-gradient(180deg,rgba(200,16,46,.16),rgba(22,91,51,.10) 65%,transparent);padding-top:44px}
+.trophy,.acct{top:30px}
+.pop{top:82px}
+.ttl{color:var(--xr);margin-bottom:4px}
+.xdd{font-size:14px;font-weight:700;color:var(--xg);margin:0 0 14px;letter-spacing:.02em}
+.lights{position:absolute;top:0;left:0;right:0;height:22px;display:flex;justify-content:space-between;padding:0 6px;pointer-events:none;overflow:hidden}
+.lights::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--ln)}
+.lights i{position:relative;top:2px;width:9px;height:14px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:var(--xr);box-shadow:0 0 8px 2px var(--xr);animation:tw 1.8s ease-in-out infinite}
+.lights i:nth-child(4n+2){background:var(--xgold);box-shadow:0 0 8px 2px var(--xgold);animation-delay:.45s}
+.lights i:nth-child(4n+3){background:#2fbf71;box-shadow:0 0 8px 2px #2fbf71;animation-delay:.9s}
+.lights i:nth-child(4n+4){background:#4aa3ff;box-shadow:0 0 8px 2px #4aa3ff;animation-delay:1.35s}
+@keyframes tw{0%,100%{opacity:.4}50%{opacity:1}}
+.box{border:3px solid transparent;background:linear-gradient(var(--sf),var(--sf)) padding-box,repeating-linear-gradient(45deg,var(--xr) 0 10px,#fff 10px 20px) border-box}
+.total{color:var(--xr)}
+h2{border-left-color:var(--xg)}
+h2::after{content:" ❄";font-size:14px;color:var(--xg)}
+button.p{background:var(--xr);color:var(--xon);border-color:var(--xr)}
+.chips button.on{background:var(--xg);color:var(--xgon);border-color:var(--xg);text-shadow:none;font-weight:800}
+.day.sel{outline-color:var(--xg)}
+#snow{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#snow span{position:absolute;top:-24px;color:#fff;opacity:.8;text-shadow:0 0 3px rgba(80,110,160,.8);animation:fall linear infinite}
+@keyframes fall{0%{transform:translate(0,-24px) rotate(0)}50%{transform:translate(18px,55vh) rotate(180deg)}100%{transform:translate(-12px,108vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.lights i{animation:none}#snow{display:none}}
+
+/* ===== ✨ 더 예쁘게 ===== */
+.hero{padding-top:56px}
+.trophy,.acct{top:40px}
+.pop{top:92px}
+.lights{height:34px}
+.lights::before{height:14px;background:radial-gradient(circle at 10px 0,#1f7a3f 10px,transparent 11px) 0 0/20px 14px repeat-x,radial-gradient(circle at 20px 0,#2a9d57 8px,transparent 9px) 0 0/20px 12px repeat-x}
+.lights i{top:12px}
+.tree{width:68px;height:auto;display:block;margin:0 auto 2px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}
+.tree .st{animation:tw 1.6s ease-in-out infinite;transform-origin:34px 8px}
+.tree .o1{animation:tw 2s ease-in-out infinite}.tree .o2{animation:tw 2s ease-in-out .6s infinite}.tree .o3{animation:tw 2s ease-in-out 1.2s infinite}
+.ttl{font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;font-size:26px;text-shadow:0 2px 0 rgba(255,255,255,.6),0 0 14px rgba(212,160,23,.35)}
+.xdd{display:inline-block;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:3px 14px;box-shadow:0 2px 6px rgba(30,40,80,.08)}
+.box{position:relative;margin-top:14px;box-shadow:0 10px 28px rgba(200,16,46,.18),0 0 0 4px rgba(22,91,51,.10)}
+.total{background:linear-gradient(90deg,var(--xr),var(--xgold),var(--xr));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+h2{background:linear-gradient(90deg,rgba(200,16,46,.13),transparent 80%);padding:6px 10px;border-radius:0 10px 10px 0;margin-top:34px}
+#students .card:nth-child(odd){border-left:4px solid var(--xr)}
+#students .card:nth-child(even){border-left:4px solid var(--xg)}
+.card{border-radius:16px}
+.pd{box-shadow:inset 0 0 0 1px rgba(22,91,51,.25)}
+.xfoot{position:relative;margin-top:-40px;text-align:center;color:var(--xg);font-weight:700;font-size:14px;padding-bottom:calc(36px + env(safe-area-inset-bottom,0px))}
+.xfoot svg{display:block;width:100%;height:auto}
+.xfoot p{margin:-8px 0 0;position:relative}
+main{padding-bottom:20px}
+
+/* ===== 🎁 계좌 선물상자 ===== */
+.acct{min-height:0;padding:0;background:none;border:none;box-shadow:none;border-radius:0;display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--xr);font-size:11px;font-weight:800;animation:wig 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.acct svg{width:52px;height:auto;display:block;filter:drop-shadow(0 4px 4px rgba(0,0,0,.28))}
+@keyframes wig{0%,84%,100%{transform:rotate(0)}87%{transform:rotate(-9deg)}90%{transform:rotate(8deg)}93%{transform:rotate(-5deg)}96%{transform:rotate(3deg)}}
+@media (prefers-reduced-motion:reduce){.acct{animation:none}}
 </style>
 </head>
 <body>
 <section class="hero">
+  <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <button class="trophy" id="trophyBtn" onclick="openAward()" aria-label="시상식">🏆</button>
-  <button class="acct" onclick="var p=document.getElementById('pop');p.hidden=!p.hidden">영완쌤 계좌</button>
-  <div class="pop" id="pop" hidden><b>영완쌤 계좌</b><span>신한 110-358-985408</span><button class="mini" style="margin-top:8px;width:100%" onclick="copyAcct()">복사하기</button></div>
-  <h1 class="ttl">⏰ 지각비 장부</h1>
+  <button class="acct" onclick="var p=document.getElementById('pop');p.hidden=!p.hidden" aria-label="영완쌤 계좌 선물상자"><svg viewBox="0 0 56 50" aria-hidden="true"><rect x="7" y="22" width="42" height="26" rx="3" fill="#c8102e"/><rect x="7" y="22" width="42" height="6" fill="#000" opacity=".12"/><rect x="3" y="14" width="50" height="11" rx="3" fill="#e0243f"/><rect x="25" y="14" width="6" height="34" fill="#f2c94c"/><rect x="25" y="14" width="6" height="11" fill="#f7dc7a"/><ellipse cx="21" cy="9" rx="8" ry="5" transform="rotate(-25 21 9)" fill="none" stroke="#f2c94c" stroke-width="3.5"/><ellipse cx="35" cy="9" rx="8" ry="5" transform="rotate(25 35 9)" fill="none" stroke="#f2c94c" stroke-width="3.5"/><circle cx="28" cy="12" r="3.6" fill="#f2c94c"/></svg><span>영완쌤 계좌</span></button>
+  <div class="pop" id="pop" hidden><b>🎁 영완쌤 계좌</b><span>신한 110-358-985408</span><button class="mini" style="margin-top:8px;width:100%" onclick="copyAcct()">복사하기</button></div>
+  <svg class="tree" viewBox="0 0 64 74" aria-hidden="true"><rect x="28" y="62" width="8" height="10" rx="1.5" fill="#7a4a24"/><polygon points="32,10 50,32 14,32" fill="#1f7a3f"/><polygon points="32,22 54,48 10,48" fill="#26924d"/><polygon points="32,36 58,64 6,64" fill="#2fa95b"/><polygon class="st" points="32,0 34.4,6 41,6.4 36,10.6 37.6,17 32,13.4 26.4,17 28,10.6 23,6.4 29.6,6" fill="#f2c94c"/><circle class="o1" cx="28" cy="28" r="2.6" fill="#ff4d6d"/><circle class="o2" cx="38" cy="43" r="2.8" fill="#f2c94c"/><circle class="o3" cx="23" cy="51" r="2.8" fill="#4aa3ff"/><circle class="o1" cx="40" cy="57" r="2.8" fill="#ff4d6d"/><circle class="o2" cx="30" cy="42" r="2.4" fill="#4aa3ff"/><circle class="o3" cx="46" cy="60" r="2.4" fill="#f2c94c"/><circle class="o1" cx="16" cy="60" r="2.4" fill="#f2c94c"/></svg>
+  <h1 class="ttl">🎄 지각비 장부 🎅</h1>
+  <div class="xdd" id="xdd"></div>
   <div class="box">
     <p>지금까지 쌓인 지각비</p>
     <div class="total" id="total">0원</div>
@@ -180,6 +241,7 @@ body:not(.edit) .eo,body:not(.edit) .rec .b{display:none}
   <button class="full eo mini" style="width:100%;margin-top:4px" onclick="csetStart()">이 날을 첫 순서(우현부터)로 설정</button>
   </div>
 </main>
+<footer class="xfoot" aria-hidden="true"><svg viewBox="0 0 400 90" preserveAspectRatio="none"><path d="M0 50 Q50 20 110 44 T230 40 T340 36 T400 44 V90 H0Z" fill="#dfe8f5" opacity=".7"/><path d="M0 66 Q70 40 140 62 T270 58 T400 60 V90 H0Z" fill="#fff" stroke="#cfd9ea" stroke-width="1"/><g fill="#1f7a3f"><polygon points="40,62 52,38 64,62"/><polygon points="44,52 52,30 60,52" fill="#2a9d57"/><polygon points="330,60 340,40 350,60"/><polygon points="334,50 340,32 346,50" fill="#2a9d57"/><polygon points="360,64 368,48 376,64"/></g></svg><p>🎄 올 한 해도 수고했어요 · Merry Christmas! 🎅</p></footer>
 <div id="award" hidden>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
     <radialGradient id="mg1" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fff4c0"/><stop offset=".45" stop-color="#e2b845"/><stop offset="1" stop-color="#8f6a14"/></radialGradient>
@@ -195,6 +257,7 @@ body:not(.edit) .eo,body:not(.edit) .rec .b{display:none}
 </div>
 <div id="dlg" hidden><div class="dbox"><div id="dmsg"></div><input id="din" hidden><div class="drow"><button onclick="dclose(false)">취소</button><button class="p" onclick="dclose(true)">확인</button></div></div></div>
 <div id="toast" hidden></div>
+<div id="snow" aria-hidden="true"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -333,7 +396,7 @@ function renderStudents(){
   ordered().forEach(function(s){
     var rs=D.recs.filter(function(r){return r.sid===s.id}).sort(function(a,b){return b.date.localeCompare(a.date)});
     var sum=stuSum(s),paid=paidOf(s.id),ps=(D.pays||[]).filter(function(p){return p.sid===s.id}).sort(function(a,b){return b.date.localeCompare(a.date)});
-    var ptag=paid>0?' <span class="tag pd">'+(sum===0?'완납 ':'납부 ')+won(paid)+'</span>':'';
+    var ptag=paid>0?' <span class="tag pd">'+(sum===0?'🎁 완납 ':'납부 ')+won(paid)+'</span>':'';
     h+='<div class="card"><div class="row"><div><span class="name">'+esc(s.name)+'</span> <span class="sub">'+rs.length+'회</span>'+ptag+'</div><div class="row">'+(unlocked?'<button class="mini" onclick="adj(\''+s.id+'\',-1000)">−1,000</button>':'')+'<span class="amt">'+won(sum)+'</span>'+(unlocked?'<button class="mini" onclick="adj(\''+s.id+'\',1000)">+1,000</button>':'')+'<button class="mini" onclick="togg(\''+s.id+'\')">'+(open[s.id]?"닫기":"기록")+'</button></div></div>';
     if(open[s.id]){h+=rs.length?rs.map(recLine).join(""):'<div class="empty">지각 기록이 없어요.</div>';
       if(s.adj)h+='<div class="rec"><span>금액 조정 '+(s.adj>0?"+":"")+won(s.adj)+'</span><span class="b"><button onclick="editAdj(\''+s.id+'\')">수정</button><button class="d" onclick="delAdj(\''+s.id+'\')">삭제</button></span></div>';
@@ -349,7 +412,7 @@ function renderCal(){
   for(var d=1;d<=days;d++){
     var ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
     var rs=D.recs.filter(function(r){return r.date===ds});
-    h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'
+    h+='<button class="day'+(ds===today?" today":"")+(ds===selDate?" sel":"")+'" onclick="selDay(\''+ds+'\')"><span class="n">'+d+'</span>'+(m===11&&d===25?'<span style="float:right;font-size:11px">🎄</span>':'')
      +dayChips(rs,ds)+'</button>'}
   document.getElementById("cal").innerHTML=h;
   var dt=document.getElementById("detail");
@@ -574,6 +637,16 @@ function render(){
 document.getElementById("ft").addEventListener("input",upPrev);
 document.getElementById("fd").value=ymd(new Date());
 upPrev();render();applyMode();initSync();
+
+function xmasInit(){
+  var n=new Date(),t=new Date(n.getFullYear(),n.getMonth(),n.getDate()),x=new Date(n.getFullYear(),11,25),
+      dd=Math.round((x-t)/864e5),e=document.getElementById("xdd");
+  e.textContent=dd>0?"🎁 크리스마스까지 D-"+dd:(dd===0?"🎉 메리 크리스마스!":"✨ 즐거운 연말 보내세요");
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  var c=document.getElementById("snow"),ch=["❄","❅","❆","•"],h="";
+  for(var i=0;i<26;i++){h+='<span style="left:'+(Math.random()*100).toFixed(1)+'%;font-size:'+(8+Math.random()*10).toFixed(0)+'px;animation-duration:'+(9+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*16).toFixed(1)+'s">'+ch[i%4]+'</span>'}
+  c.innerHTML=h}
+xmasInit();
 </script>
 </body>
 </html>
