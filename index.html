@@ -653,9 +653,9 @@ upPrev();render();applyMode();initSync();
 function xmasInit(){
   var n=new Date(),t=new Date(n.getFullYear(),n.getMonth(),n.getDate()),x=new Date(n.getFullYear(),11,25),
       dd=Math.round((x-t)/864e5),e=document.getElementById("xdd");
-  e.textContent=dd>0?"🎁 크리스마스까지 D-"+dd:(dd===0?"🎉 메리 크리스마스!":"✨ 즐거운 연말 보내세요");
+  e.textContent=dd>0?"🎁 크리스마스 D-"+dd:(dd===0?"🎉 메리 크리스마스!":"✨ 즐거운 연말 보내세요");
   var ex0=new Date(2026,11,9),ex1=new Date(2026,11,15),d2=Math.round((ex0-t)/864e5),e2=document.getElementById("xdd2");
-  e2.textContent=d2>0?"📝 기말고사까지 D-"+d2:(t<=ex1?(d2===0?"📝 오늘 기말고사 시작!":"📝 기말고사 기간 중!"):"🎉 기말고사 끝! 수고했어요");
+  e2.textContent=d2>0?"📝 기말고사 D-"+d2:(t<=ex1?(d2===0?"📝 오늘 기말고사 시작!":"📝 기말고사 기간 중!"):"🎉 기말고사 끝! 수고했어요");
   }
 xmasInit();
 </script>
