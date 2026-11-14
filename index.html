@@ -241,7 +241,7 @@ main{padding-bottom:20px}
     <span><span class="tag t2">빨강</span> 8:06~8:09:59 · 3,000원</span>
     <span><span class="tag t3">보라</span> 8:10~ · 4,000원</span>
     <span><span class="tag pd">초록</span> 납부</span>
-    
+    <span><span class="tag" style="background:var(--rt);color:var(--red)">연빨강</span> 시험 일정</span>
   </div>
   <div class="nav"><button onclick="mv(-1)" aria-label="이전 달">‹</button><span id="mt"></span><button onclick="mv(1)" aria-label="다음 달">›</button></div>
   <div class="cal" id="cal"></div>
@@ -270,7 +270,6 @@ main{padding-bottom:20px}
 </div>
 <div id="dlg" hidden><div class="dbox"><div id="dmsg"></div><input id="din" hidden><div class="drow"><button onclick="dclose(false)">취소</button><button class="p" onclick="dclose(true)">확인</button></div></div></div>
 <div id="toast" hidden></div>
-<div id="snow" aria-hidden="true"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -657,10 +656,7 @@ function xmasInit(){
   e.textContent=dd>0?"🎁 크리스마스까지 D-"+dd:(dd===0?"🎉 메리 크리스마스!":"✨ 즐거운 연말 보내세요");
   var ex0=new Date(2026,11,9),ex1=new Date(2026,11,15),d2=Math.round((ex0-t)/864e5),e2=document.getElementById("xdd2");
   e2.textContent=d2>0?"📝 기말고사까지 D-"+d2:(t<=ex1?(d2===0?"📝 오늘 기말고사 시작!":"📝 기말고사 기간 중!"):"🎉 기말고사 끝! 수고했어요");
-  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
-  var c=document.getElementById("snow"),ch=["❄","❅","❆","•"],h="";
-  for(var i=0;i<26;i++){h+='<span style="left:'+(Math.random()*100).toFixed(1)+'%;font-size:'+(8+Math.random()*10).toFixed(0)+'px;animation-duration:'+(9+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*16).toFixed(1)+'s">'+ch[i%4]+'</span>'}
-  c.innerHTML=h}
+  }
 xmasInit();
 </script>
 </body>
